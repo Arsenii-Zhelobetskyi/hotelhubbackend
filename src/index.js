@@ -15,7 +15,7 @@ app.use(express.json());
 app.use("/api/users", users);
 app.use("/api/houses", houses);
 app.use("/api/hotels", hotels);
-app.use("/api/rooms", hotels);
+app.use("/api/rooms", rooms);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");

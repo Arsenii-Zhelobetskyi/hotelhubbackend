@@ -52,7 +52,7 @@ router.get("/hotel/:id", async (req, res) => {
   const data = await prisma.hotel.findUnique({
     where: { id: parseInt(req.params.id) },
   });
-  console.log(data);
+
   res.json(data);
 });
 router.get("/create", async (req, res) => {
