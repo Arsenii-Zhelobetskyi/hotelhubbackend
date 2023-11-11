@@ -13,7 +13,7 @@ class HouseService {
 
   async getHouseById(id) {
     const house = await prisma.house.findUnique({
-      where: { id },
+      where: { id: id },
     });
     return house;
   }

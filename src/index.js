@@ -16,6 +16,7 @@ app.use(
 );
 app.use(express.json());
 
+// app.use("/api/users");
 // усі шляхи у нашому api:
 app.get("/api/users", async (req, res) => {
   const users = await userInstance.getAllUsers();
@@ -37,7 +38,11 @@ app.get("/api/hotel/:id", async (req, res) => {
 
   res.json(hotel);
 });
+app.get("/api/house/:id", async (req, res) => {
+  const hotel = await houseInstance.getHouseById(parseInt(req.params.id));
 
+  res.json(hotel);
+});
 app.get("/api/totalOccupiedPlaces", async (req, res) => {
   const rooms = await roomInstance.getOccupiedPlacesByHotel();
   res.json(rooms);
@@ -46,3 +51,4 @@ app.get("/api/totalOccupiedPlaces", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
+// SKORO PRIDY
