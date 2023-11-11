@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+/* const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -37,4 +37,29 @@ class HotelService {
 
 const hotelInstance = new HotelService();
 
-module.exports = hotelInstance;
+module.exports = hotelInstance; */
+
+const express = require("express");
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
+const router = express.Router();
+router.get("/", async (req, res) => {
+  const data = await prisma.hotel.findMany();
+  res.json(data);
+});
+router.get("/hotel/:id", async (req, res) => {
+  const data = await prisma.hotel.findUnique({
+    where: { id: parseInt(req.params.id) },
+  });
+  console.log(data);
+  res.json(data);
+});
+router.get("/create", async (req, res) => {
+  const data = await prisma.hotel.create({
+    data: req.body,
+  });
+  res.json(data);
+});
+
+module.exports = router;

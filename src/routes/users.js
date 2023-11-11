@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+/* const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -27,3 +27,28 @@ class UserService {
 const userInstance = new UserService();
 
 module.exports = userInstance;
+ */
+const express = require("express");
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
+const router = express.Router();
+
+router.get("/", async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
+});
+router.get("/user/:id", async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: { id: parseInt(req.params.id) },
+  });
+  res.json(users);
+});
+router.get("/create", async (req, res) => {
+  const user = await prisma.user.create({
+    data: req.body,
+  });
+  res.json(user);
+});
+
+module.exports = router;

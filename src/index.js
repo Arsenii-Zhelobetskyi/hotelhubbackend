@@ -1,54 +1,22 @@
 const express = require("express");
-const userInstance = require("./models/User");
-const houseInstance = require("./models/House");
-const hotelInstance = require("./models/Hotel");
-const roomInstance = require("./models/Room");
+
 const cors = require("cors");
 const FRONTEND_URL = process.env.FRONTEND_URL; // імпортуємо з .env
 
+const users = require("./routes/users");
+const houses = require("./routes/houses");
+const hotels = require("./routes/hotels");
+const rooms = require("./routes/rooms");
 const app = express();
-app.use(
-  cors({
-    origin: FRONTEND_URL,
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-  })
-);
+app.use(cors());
+
 app.use(express.json());
 
-// app.use("/api/users");
-// усі шляхи у нашому api:
-app.get("/api/users", async (req, res) => {
-  const users = await userInstance.getAllUsers();
-  res.json(users);
-});
-
-app.get("/api/houses", async (req, res) => {
-  const houses = await houseInstance.getAllHouses();
-  res.json(houses);
-});
-
-app.get("/api/hotels", async (req, res) => {
-  const hotels = await hotelInstance.getAllHotels();
-  res.json(hotels);
-});
-
-app.get("/api/hotel/:id", async (req, res) => {
-  const hotel = await hotelInstance.getHotelById(parseInt(req.params.id));
-
-  res.json(hotel);
-});
-app.get("/api/house/:id", async (req, res) => {
-  const hotel = await houseInstance.getHouseById(parseInt(req.params.id));
-
-  res.json(hotel);
-});
-app.get("/api/totalOccupiedPlaces", async (req, res) => {
-  const rooms = await roomInstance.getOccupiedPlacesByHotel();
-  res.json(rooms);
-});
+app.use("/api/users", users);
+app.use("/api/houses", houses);
+app.use("/api/hotels", hotels);
+app.use("/api/rooms", hotels);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
-// SKORO PRIDY
