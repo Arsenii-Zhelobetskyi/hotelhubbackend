@@ -7,7 +7,7 @@ const users = require("./routes/users");
 const houses = require("./routes/houses");
 const hotels = require("./routes/hotels");
 const rooms = require("./routes/rooms");
-const orderList = require("./routes/orderList")
+const orderHistory = require("./routes/orderHistory")
 const app = express();
 app.use(cors());
 
@@ -17,7 +17,7 @@ app.use("/api/users", users);
 app.use("/api/houses", houses);
 app.use("/api/hotels", hotels);
 app.use("/api/rooms", rooms);
-app.use("/api/orderList", orderList)
+app.use("/api/orderHistory", orderHistory)
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
