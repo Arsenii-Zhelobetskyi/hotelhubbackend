@@ -35,6 +35,8 @@ model hotel {
   contact_inf String? @db.VarChar(50)
   photo       String? @db.VarChar(250)
   room        room[]
+  cityId      Int?     @db.UnsignedInt
+  city        city?    @relation(fields: [cityId], references: [cityId], onDelete: Cascade, onUpdate: NoAction, map: "hotels_ibfk_1")
 
   @@index([name], map: "idx_hotel_name")
 }
@@ -52,8 +54,21 @@ model house {
   photo              Json?
   comfortPlusHouse   comfortPlusHouse[]
   reservation_object reservation_object[]
+  cityId             Int?                 @db.UnsignedInt
+  city               city?                @relation(fields: [cityId], references: [cityId], onDelete: Cascade, onUpdate: NoAction, map: "houses_ibfk_1")
+
 
   @@index([roomN, placeN], map: "idx_house_num")
+}
+
+model city {
+  cityId   Int        @id @default(autoincrement()) @db.UnsignedInt
+  country  String?    @db.VarChar(100)
+  name     String?    @db.VarChar(100)
+  hotels   hotel[]
+  houses   house[]
+   
+  @@index([name,country], map: "idx_city")
 }
 
 model payCheck {
