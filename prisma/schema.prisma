@@ -26,19 +26,21 @@ model comfortPlusHouse {
 }
 
 model hotel {
-  id          Int     @id @default(autoincrement()) @db.UnsignedInt
-  name        String? @db.VarChar(50)
-  address     String? @db.VarChar(100)
-  roomN       Int?    @db.UnsignedSmallInt
-  placeN      Int?    @db.UnsignedSmallInt
-  description String? @db.VarChar(250)
-  contact_inf String? @db.VarChar(50)
-  photo       String? @db.VarChar(250)
-  room        room[]
-  cityId      Int?     @db.UnsignedInt
-  city        city?    @relation(fields: [cityId], references: [cityId], onDelete: Cascade, onUpdate: NoAction, map: "hotels_ibfk_1")
+  id              Int               @id @default(autoincrement()) @db.UnsignedInt
+  name            String?           @db.VarChar(50)
+  address         String?           @db.VarChar(100)
+  roomN           Int?              @db.UnsignedSmallInt
+  placeN          Int?              @db.UnsignedSmallInt
+  description     String?           @db.VarChar(250)
+  contact_inf     String?           @db.VarChar(50)
+  photo           String?           @db.VarChar(250)
+  cityId          Int?              @db.UnsignedInt
+  city            city?             @relation(fields: [cityId], references: [cityId], onDelete: Cascade, onUpdate: NoAction, map: "hotels_ibfk_1")
+  hotels_comments hotels_comments[]
+  room            room[]
 
   @@index([name], map: "idx_hotel_name")
+  @@index([cityId], map: "hotels_ibfk_1")
 }
 
 model house {
@@ -52,23 +54,23 @@ model house {
   status             house_status?
   price              Int?                 @db.UnsignedSmallInt
   photo              Json?
-  comfortPlusHouse   comfortPlusHouse[]
-  reservation_object reservation_object[]
   cityId             Int?                 @db.UnsignedInt
+  comfortPlusHouse   comfortPlusHouse[]
   city               city?                @relation(fields: [cityId], references: [cityId], onDelete: Cascade, onUpdate: NoAction, map: "houses_ibfk_1")
-
+  reservation_object reservation_object[]
 
   @@index([roomN, placeN], map: "idx_house_num")
+  @@index([cityId], map: "houses_ibfk_1")
 }
 
 model city {
-  cityId   Int        @id @default(autoincrement()) @db.UnsignedInt
-  country  String?    @db.VarChar(100)
-  name     String?    @db.VarChar(100)
-  hotels   hotel[]
-  houses   house[]
-   
-  @@index([name,country], map: "idx_city")
+  cityId  Int     @id @default(autoincrement()) @db.UnsignedInt
+  country String? @db.VarChar(100)
+  name    String? @db.VarChar(100)
+  hotels  hotel[]
+  houses  house[]
+
+  @@index([name, country], map: "idx_city")
 }
 
 model payCheck {
@@ -147,16 +149,28 @@ model room {
 }
 
 model user {
-  id            Int             @id @default(autoincrement()) @db.UnsignedInt
-  name          String?         @db.VarChar(50)
-  email         String?         @unique(map: "email") @db.VarChar(50)
-  password      String?         @db.VarChar(50)
-  role_id       Int?            @db.UnsignedInt
-  reservation   reservation[]
-  review        review[]
-  role          role?           @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_ibfk_1")
+  id          Int           @id @default(autoincrement()) @db.UnsignedInt
+  name        String?       @db.VarChar(50)
+  email       String?       @unique(map: "email") @db.VarChar(50)
+  password    String?       @db.VarChar(50)
+  role_id     Int?          @db.UnsignedInt
+  reservation reservation[]
+  review      review[]
+  role        role?         @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_ibfk_1")
 
   @@index([role_id], map: "role_id")
+}
+
+model hotels_comments {
+  id       Int      @id @default(autoincrement())
+  title    String?  @db.VarChar(50)
+  body     String?  @db.VarChar(150)
+  rating   Int
+  date     DateTime @default(dbgenerated("(curdate())")) @db.DateTime(0)
+  hotel_id Int      @db.UnsignedInt
+  hotel    hotel    @relation(fields: [hotel_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "hotels_comments_hotel_id_fk")
+
+  @@index([hotel_id], map: "hotels_comments_hotel_id_fk")
 }
 
 enum room_status {
