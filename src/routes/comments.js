@@ -4,9 +4,12 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/:id", async (req, res) => {
   const data = await prisma.hotels_comments.findMany({
-    take: 10,
+    take: 5,
+    where: {
+      hotel_id: parseInt(req.params.id),
+    },
   });
   res.json(data);
 });
