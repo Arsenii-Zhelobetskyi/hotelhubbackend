@@ -166,7 +166,7 @@ model hotels_comments {
   title    String?  @db.VarChar(50)
   body     String?  @db.VarChar(150)
   rating   Int
-  date     DateTime @default(dbgenerated("(curdate())")) @db.DateTime(0)
+  date     DateTime @default(now()) @db.Timestamp(0)
   hotel_id Int      @db.UnsignedInt
   hotel    hotel    @relation(fields: [hotel_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "hotels_comments_hotel_id_fk")
 
@@ -177,7 +177,7 @@ model houses_comments {
   title    String?  @db.VarChar(50)
   body     String?  @db.VarChar(150)
   rating   Int
-  date     DateTime @default(dbgenerated("(curdate())")) @db.DateTime(0)
+  date     DateTime @default(now()) @db.Timestamp(0)
   house_id Int      @db.UnsignedInt
   house    house    @relation(fields: [house_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "houses_comments_house_id_fk")
 
