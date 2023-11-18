@@ -44,11 +44,39 @@ router.get("/user/:id", async (req, res) => {
   });
   res.json(users);
 });
-router.get("/create", async (req, res) => {
-  const user = await prisma.user.create({
-    data: req.body,
-  });
-  res.json(user);
+router.post("/create", async (req, res) => {
+  try {
+    const { name, email, password, role_id } = req.body;
+
+    const maxIdUser = await prisma.user.findMany({
+      orderBy: {
+        id: 'desc'
+      },
+      take: 1,
+    });
+
+    const maxId = maxIdUser.length > 0 ? maxIdUser[0].id : 0;
+
+    // Встановлюємо новий айді як максимальний айді + 1
+    const newId = maxId + 1;
+
+    // Створюємо нового користувача із новим айді
+    const user = await prisma.user.create({
+      data: {
+        id: newId,
+        name,
+        email,
+        password,
+        role_id,
+        // Додавайте інші поля, якщо необхідно
+      },
+    });
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;
