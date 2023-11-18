@@ -6,16 +6,13 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const cities = await prisma.city.findMany({
-      select: {
-        name: true,
-        country: true,
-      },
-      distinct: ['name', 'country'], // distinct для використання індексу idx_city
+    select: {
+      name: true,
+      country: true,
+    },
+    distinct: ["name", "country"], // distinct для використання індексу idx_city
   });
-  console.log(cities);
   res.json(cities);
 });
-
-
 
 module.exports = router;

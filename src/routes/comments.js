@@ -17,8 +17,9 @@ router.get("/:id", async (req, res) => {
 
 router.post("/create", async (req, res) => {
   try {
-    const { title, body, rating, type, id } = req.body;
-    console.log(id);
+    const type = req.query.type;
+    const { title, body, rating, id } = req.body;
+    console.log(req.body);
     const newComment = await prisma[`${type}s_comments`].create({
       data: {
         title,
