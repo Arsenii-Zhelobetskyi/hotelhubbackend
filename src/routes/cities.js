@@ -12,7 +12,6 @@ router.get("/", async (req, res) => {
       },
       distinct: ['name', 'country'], // distinct для використання індексу idx_city
   });
-  console.log(cities);
   res.json(cities);
 });
 
