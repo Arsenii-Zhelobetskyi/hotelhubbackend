@@ -11,6 +11,7 @@ const reservation = require("./routes/reservation");
 const pay = require("./routes/pay");
 const cities = require("./routes/cities");
 const comments = require("./routes/comments");
+const search = require("./routes/search");
 const app = express();
 app.use(cors());
 
@@ -24,6 +25,7 @@ app.use("/api/reservation", reservation);
 app.use("/api/pay", pay);
 app.use("/api/cities", cities);
 app.use("/api/comments", comments);
+app.use("/api/search", search);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
