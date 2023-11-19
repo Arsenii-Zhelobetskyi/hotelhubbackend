@@ -23,15 +23,23 @@ router.get("/count", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const type = req.query.type;
+
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
   const skip = (page - 1) * limit;
+
+  const orderBy = req.query.orderBy ? JSON.parse(req.query.orderBy) : "";
   const data = await prisma[`${type}s_comments`].findMany({
     skip: skip,
     take: limit,
     where: {
       [`${type}_id`]: id,
     },
+    orderBy: orderBy.field
+      ? {
+          [orderBy.field]: orderBy.algorithm,
+        }
+      : undefined,
   });
   res.json(data);
 });
