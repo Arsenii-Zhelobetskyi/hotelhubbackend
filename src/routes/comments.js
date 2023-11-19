@@ -63,13 +63,17 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.post("/sortBy", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
+    const id = parseInt(req.params.id);
     const type = req.query.type;
-    const { title, body, rating, id } = req.body;
-    console.log(req.body);
-
-    res.json(newComment);
+    console.log(id, type);
+    const deletedComment = await prisma[`${type}s_comments`].delete({
+      where: {
+        id,
+      },
+    });
+    res.json(deletedComment);
   } catch (err) {
     console.error(err);
     res.json(err);
