@@ -46,6 +46,7 @@ const prisma = new PrismaClient();
 const router = express.Router();
 router.get("/", async (req, res) => {
   const data = await prisma.hotel.findMany();
+
   res.json(data);
 });
 router.get("/hotel/:id", async (req, res) => {
