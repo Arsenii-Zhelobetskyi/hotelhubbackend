@@ -38,12 +38,24 @@ router.get("/", async (req, res) => {
   const users = await prisma.user.findMany();
   res.json(users);
 });
+
 router.get("/user/:id", async (req, res) => {
-  const user = await prisma.user.findUnique({
-    where: { id: parseInt(req.params.id) },
-  });
-  res.json(users);
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(req.params.id) },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
+
 router.post("/create", async (req, res) => {
   try {
     const { name, email, password, role_id } = req.body;
@@ -57,10 +69,8 @@ router.post("/create", async (req, res) => {
 
     const maxId = maxIdUser.length > 0 ? maxIdUser[0].id : 0;
 
-    // Встановлюємо новий айді як максимальний айді + 1
     const newId = maxId + 1;
 
-    // Створюємо нового користувача із новим айді
     const user = await prisma.user.create({
       data: {
         id: newId,
@@ -68,13 +78,66 @@ router.post("/create", async (req, res) => {
         email,
         password,
         role_id,
-        // Додавайте інші поля, якщо необхідно
       },
     });
 
     res.json(user);
   } catch (error) {
     console.error("Error creating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.put("/update/:id", async (req, res) => {
+  try {
+    const { name, email, password, role_id } = req.body;
+    const userId = parseInt(req.params.id);
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name: name || existingUser.name,
+        email: email || existingUser.email,
+        password: password || existingUser.password,
+        role_id: role_id || existingUser.role_id,
+      },
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id);
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const deletedUser = await prisma.user.delete({
+      where: { id: userId },
+    });
+
+    res.json(deletedUser);
+  } catch (error) {
+    console.error("Error deleting user:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
