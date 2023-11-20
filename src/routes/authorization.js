@@ -1,5 +1,6 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
+const jwt= require("jsonwebtoken");
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -23,7 +24,9 @@ router.post("/login", async (req, res) => {
       res.status(401).json({ error: "Wrong password" });
     }
   } catch (error) {
-    res.status(500).json(500);
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 module.exports = router;
