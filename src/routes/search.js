@@ -9,18 +9,26 @@ router.get("/:accommodationType", async (req, res) => {
   console.log(req.query);
   const accommodationType = req.params.accommodationType;
   const { city, startDate, endDate, guests } = req.query;
-  let data;
+  let data; 
   
   const reservObject = await prisma.reservation.findMany({
       select: { object_id: true },
-      where: { start_date: { gte: new Date(startDate) }, end_date: { lte: new Date(endDate) }, }
+      where: { OR: [
+          { start_date: { gte: new Date(startDate), lte: new Date(endDate) } },
+          { end_date: { lte: new Date(endDate), gte: new Date(startDate) } },
+          { AND: [{ start_date: { gte: new Date(startDate) } }, { end_date: { lte: new Date(endDate) } }] },
+        ],
+      }
   }); console.log(reservObject);
 
   if (accommodationType === 'house') {
     
       const objectIds = await prisma.reservation_object.findMany({
         select: { house_id: true },
-        where: { id: { in: reservObject.map(object => object.object_id) }, },
+        where: {
+          id: { in: reservObject.map(object => object.object_id) },
+          house_id: { not: null },
+        },
       }); console.log(objectIds);
       
       data = await prisma.house.findMany({
@@ -39,7 +47,10 @@ router.get("/:accommodationType", async (req, res) => {
 
       const objectIds = await prisma.reservation_object.findMany({
         select: { room_id: true },
-        where: { id: { in: reservObject.map(object => object.object_id) }, },
+        where: {
+          id: { in: reservObject.map(object => object.object_id) },
+          room_id: { not: null },
+        },
       }); console.log(objectIds);
 
       const roomData = await prisma.room.findMany({
