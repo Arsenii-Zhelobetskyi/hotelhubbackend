@@ -33,7 +33,7 @@ model hotel {
   placeN          Int?              @db.UnsignedSmallInt
   description     String?           @db.VarChar(250)
   contact_inf     String?           @db.VarChar(50)
-  photo           String?           @db.VarChar(250)
+  photo           Json?
   cityId          Int?              @db.UnsignedInt
   city            city?             @relation(fields: [cityId], references: [cityId], onDelete: Cascade, onUpdate: NoAction, map: "hotels_ibfk_1")
   hotels_comments hotels_comments[]
