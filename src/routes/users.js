@@ -104,10 +104,10 @@ router.put("/update/:id", async (req, res) => {
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
-        name: name || existingUser.name,
-        email: email || existingUser.email,
-        password: password || existingUser.password,
-        role_id: role_id || existingUser.role_id,
+        name: name,
+        email: email,
+        password: password,
+        role_id: role_id,
       },
     });
 
