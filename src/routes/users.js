@@ -46,7 +46,7 @@ router.get("/user/:id", async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     res.json(user);
@@ -62,7 +62,7 @@ router.post("/create", async (req, res) => {
 
     const maxIdUser = await prisma.user.findMany({
       orderBy: {
-        id: 'desc'
+        id: "desc",
       },
       take: 1,
     });
@@ -98,7 +98,7 @@ router.put("/update/:id", async (req, res) => {
     });
 
     if (!existingUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     const updatedUser = await prisma.user.update({
@@ -118,7 +118,6 @@ router.put("/update/:id", async (req, res) => {
   }
 });
 
-
 router.delete("/delete/:id", async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
@@ -128,7 +127,7 @@ router.delete("/delete/:id", async (req, res) => {
     });
 
     if (!existingUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     const deletedUser = await prisma.user.delete({
