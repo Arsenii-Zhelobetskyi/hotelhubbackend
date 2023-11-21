@@ -1,10 +1,11 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
-const jwt= require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 const prisma = new PrismaClient();
 const router = express.Router();
 const secretKey = "OJqijsijdlj";
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -19,7 +20,11 @@ router.post("/login", async (req, res) => {
 
     if (user.password === password) {
       const token = jwt.sign({ email: user.email }, secretKey);
-      res.status(200).json({ email, token });
+
+      // Додаємо логування айді користувача у консоль
+      console.log("User ID:", user.id);
+
+      res.status(200).json({ userId: user.id, email: user.email, token });
     } else {
       res.status(401).json({ error: "Wrong password" });
     }
@@ -30,3 +35,4 @@ router.post("/login", async (req, res) => {
 });
 
 module.exports = router;
+
