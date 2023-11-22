@@ -4,6 +4,18 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
 
+router.get("/", async (req, res) => {
+  const data = await prisma.room.findMany();
+  res.json(data);
+});
+
+router.get("/room/:id", async (req, res) => {
+  const data = await prisma.room.findUnique({
+    where: { id: parseInt(req.params.id) },
+  });
+  res.json(data);
+});
+
 router.get("/occupiedPlacesByHotel", async (req, res) => {
   const occupiedRooms = await prisma.room.groupBy({
     by: ["hotel_id"],
