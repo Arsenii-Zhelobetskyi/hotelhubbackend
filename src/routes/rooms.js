@@ -52,6 +52,13 @@ router.get("/", async (req, res) => {
   res.json(data);
 });
 
+router.get("/room/:id", async (req, res) => {
+  const data = await prisma.room.findUnique({
+    where: { id: parseInt(req.params.id) },
+  });
+  res.json(data);
+});
+
 router.get("/occupiedPlacesByHotel", async (req, res) => {
   const occupiedRooms = await prisma.room.groupBy({
     by: ["hotel_id"],
