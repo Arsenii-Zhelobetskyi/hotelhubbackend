@@ -30,7 +30,6 @@ router.get("/occupiedPlacesByHotel", async (req, res) => {
     hotelId: roomGroup.hotel_id,
     totalPlaces: roomGroup._sum.placeN || 0,
   }));
-  console.log(occupiedPlacesByHotel);
   res.json(occupiedPlacesByHotel);
 });
 router.get("/create", async (req, res) => {

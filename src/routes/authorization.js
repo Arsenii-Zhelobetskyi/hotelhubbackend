@@ -7,9 +7,8 @@ const router = express.Router();
 const secretKey = "OJqijsijdlj";
 
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
   try {
-    console.log(email, password);
+    const { email, password } = req.body;
     const user = await prisma.user.findUnique({
       where: { email },
     });
@@ -20,11 +19,8 @@ router.post("/login", async (req, res) => {
 
     if (user.password === password) {
       const token = jwt.sign({ email: user.email }, secretKey);
-
-      // Додаємо логування айді користувача у консоль
-      console.log("User ID:", user.id);
-
-      res.status(200).json({ userId: user.id, email: user.email, token });
+      console.log(user);
+      res.status(200).json({ ...user, token });
     } else {
       res.status(401).json({ error: "Wrong password" });
     }
@@ -35,4 +31,3 @@ router.post("/login", async (req, res) => {
 });
 
 module.exports = router;
-
