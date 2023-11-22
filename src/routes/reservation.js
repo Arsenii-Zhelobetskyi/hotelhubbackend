@@ -38,6 +38,7 @@ router.post("/create", async (req, res) => {
     const resObj = req.query.resObj;
     const { order } = req.body;
     order.sum = parseInt(order.sum);
+    console.log(order.sum);
     const newOrder = await prisma.reservation.create({
       data: {
         ...order,
