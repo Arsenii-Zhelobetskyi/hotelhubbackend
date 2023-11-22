@@ -33,20 +33,36 @@ router.get("/:user_id", async (req, res) => {
 
   res.json(reservations);
 });
-
 router.post("/create", async (req, res) => {
   try {
-    const type = req.query.type;
-    const { title, body, rating, id } = req.body;
-    const newComment = await prisma[`${type}s_comments`].create({
+    const resObj = req.query.resObj;
+    const { order } = req.body;
+    order.sum = parseInt(order.sum);
+    const newOrder = await prisma.reservation.create({
       data: {
-        title,
-        body,
-        rating,
+        ...order,
+        object_id: parseInt(resObj),
+      },
+    });
+    res.json(newOrder);
+  } catch (err) {
+    console.error(err);
+    res.json(err);
+  }
+});
+router.post("/create-reservation-obj", async (req, res) => {
+  try {
+    const type = req.query.type;
+    const { id } = req.body;
+    // const type_id = `${type}_id`;
+    // const value = data[type_id];
+    console.log(id, type);
+    const newOrder = await prisma.reservation_object.create({
+      data: {
         [`${type}_id`]: parseInt(id),
       },
     });
-    res.json(newComment);
+    res.json(newOrder);
   } catch (err) {
     console.error(err);
     res.json(err);

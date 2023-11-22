@@ -208,7 +208,7 @@ enum payCheck_payType {
   cash
   debit_card
   online_wallet
-}
+} 
 
 enum reservation_status {
   active
