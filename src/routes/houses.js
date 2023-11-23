@@ -36,4 +36,36 @@ router.get("/create", async (req, res) => {
   res.json(data);
 });
 
+router.put("/update/:id", async (req, res) => {
+  console.log(req.params.id);
+  const {
+    address,
+    cityId,
+    contact_inf,
+    description,
+    name,
+    photo,
+    placeN,
+    price,
+    roomN,
+    status,
+  } = req.body;
+  const data = await prisma.house.update({
+    where: { id: parseInt(req.params.id) },
+    data: {
+      address: address,
+      cityId: cityId,
+      contact_inf: contact_inf,
+      description: description,
+      name: name,
+      photo: photo,
+      placeN: placeN,
+      price: price,
+      roomN: roomN,
+      status: status,
+    },
+  });
+  res.json({ data });
+});
+
 module.exports = router;
