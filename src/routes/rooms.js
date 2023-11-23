@@ -64,4 +64,21 @@ router.get("/:id", async (req, res) => {
     res.json(err);
   }
 });
+
+router.put("/update/:id", async (req, res) => {
+  console.log(req.params.id);
+  const { hotel_id, placeN, description, price, photo, status } = req.body;
+  const data = await prisma.room.update({
+    where: { id: parseInt(req.params.id) },
+    data: {
+      placeN: placeN,
+      description: description,
+      price: price,
+      photo: photo,
+      status: status,
+    },
+  });
+  res.json({ data });
+});
+
 module.exports = router;
