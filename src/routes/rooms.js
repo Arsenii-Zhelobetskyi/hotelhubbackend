@@ -3,10 +3,19 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 const router = express.Router();
-
-router.get("/", async (req, res) => {
-  const data = await prisma.room.findMany();
-  res.json(data);
+router.get("/count", async (req, res) => {
+  try {
+    const id = parseInt(req.query.id);
+    const quantity = await prisma.room.count({
+      where: {
+        hotel_id: id,
+      },
+    });
+    res.json({ quantity });
+  } catch (err) {
+    console.error(err);
+    res.json(err);
+  }
 });
 
 router.get("/room/:id", async (req, res) => {
@@ -40,9 +49,19 @@ router.get("/create", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const data = await prisma.room.findMany({
-    where: { hotel_id: parseInt(req.params.id) },
-  });
-  res.json(data);
+  try {
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const skip = (page - 1) * limit;
+    const data = await prisma.room.findMany({
+      skip: skip,
+      take: limit,
+      where: { hotel_id: parseInt(req.params.id) },
+    });
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.json(err);
+  }
 });
 module.exports = router;
