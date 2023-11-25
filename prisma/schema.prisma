@@ -113,7 +113,6 @@ model reservation_object {
   @@index([room_id], map: "room_id")
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model review {
   id                 Int                 @id @default(autoincrement()) @db.UnsignedInt
   user_id            Int?                @db.UnsignedInt
