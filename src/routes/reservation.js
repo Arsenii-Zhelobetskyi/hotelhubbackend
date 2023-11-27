@@ -51,6 +51,24 @@ router.post("/create", async (req, res) => {
     res.json(err);
   }
 });
+router.post("/create-pay", async (req, res) => {
+  try {
+    const resId = req.query.resId;
+    const { pay } = req.body;
+    pay.sum = parseInt(pay.sum);
+    console.log(pay.sum);
+    const newPay = await prisma.payCheck.create({
+      data: {
+        ...pay,
+        reservation_id: parseInt(resId),
+      },
+    });
+    res.json(newPay);
+  } catch (err) {
+    console.error(err);
+    res.json(err);
+  }
+});
 router.post("/create-reservation-obj", async (req, res) => {
   try {
     const type = req.query.type;
